@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -17,7 +18,12 @@ import android.view.View;
 public class AlarmNotificationActivity extends Activity {
 
 	private Ringtone ringtone;
+	private int originalVolume = NOT_INITIALISED_VOLUME; 
 
+	private static final int NOT_INITIALISED_VOLUME = -1;
+	private static final int STREAM = AudioManager.STREAM_RING;
+	private static final double FRACTION_OF_MAX_VOLUME = 0.5; 
+	
 	private static final int NOTIFICATION_ID = 42;
 	private static final String TAG = AlarmNotificationActivity.class.getName();
 
@@ -36,6 +42,7 @@ public class AlarmNotificationActivity extends Activity {
 
 	private void playRingtone() {
 		Ringtone ringtone = getOrCreateRingtone();
+		setRingtoneVolumeIfRequired();
 		ringtone.play();
 	}
 
@@ -98,6 +105,29 @@ public class AlarmNotificationActivity extends Activity {
 			Log.i(TAG, "Ringtone stopped");
 		} else {
 			Log.i(TAG, "Curiously, the ringtone is not playing!!!");
+		}
+		restoreRingtoneVolume();
+	}
+	
+	private void setRingtoneVolumeIfRequired() {
+		AudioManager audioMgr = getAudioManager();
+		originalVolume = audioMgr.getStreamVolume(STREAM);
+		int maxVolume = audioMgr.getStreamMaxVolume(STREAM);
+		Log.d(TAG, "Current Volume: " +  originalVolume + ". Max Volume: " + maxVolume);
+		if (originalVolume < maxVolume * FRACTION_OF_MAX_VOLUME) {
+			audioMgr.setStreamVolume(STREAM, (int) (maxVolume * FRACTION_OF_MAX_VOLUME), 0);
+		}
+	}
+	
+	private AudioManager getAudioManager() {
+		return (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+	}
+	
+	private void restoreRingtoneVolume() {
+		if (originalVolume != NOT_INITIALISED_VOLUME) {
+			AudioManager audioManager = getAudioManager();
+			audioManager.setStreamVolume(STREAM, originalVolume, 0);
+			Log.d(TAG, "Restored Volume to " +  originalVolume);
 		}
 	}
 }
