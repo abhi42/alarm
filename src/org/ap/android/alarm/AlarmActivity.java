@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -83,6 +82,13 @@ public class AlarmActivity extends Activity {
 				.getBroadcast(getApplicationContext(), 0, bcIntent, 0);
 
 		Log.i(TAG, "pending intent for alarm created****************");
+	}
+	
+	static PendingIntent createPendingIntent(Activity activity) {
+		Intent bcIntent = new Intent(activity, MyAlarmBroadcastReceiver.class);
+
+		bcIntent.setClass(activity, MyAlarmBroadcastReceiver.class);
+		return PendingIntent.getBroadcast(activity, 0, bcIntent, 0);
 	}
 
 	private int getNumAlarmOccurrences() {
