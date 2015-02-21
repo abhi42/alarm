@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ApaAlarm</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="alarmDescText">Alarm description</string>
+    <string name="alarmDescHint">max 50 letters</string>
+
+    <string name="alarmStartText">Start date and time of the alarm</string>
+    <string name="alarmIntervalText">Alarm interval</string>
+    <string name="alarmNumOccurrencesText">Number of occurrences</string>
+
+    <string-array name="alarmIntervalUnitValues">
+        <item>Minutes</item>
+        <item>Hours</item>
+    </string-array>
+
+    <string name="alarmIntervalViewDefaultText">1 hour</string>
+    <string name="alarmOccurrencesViewDefaultText">3</string>
+
+    <string name="submitAlarmBtnText">Create Alarm</string>
+
+    <string name="alarmReceiverText">Hi there, got </string>
+    <string name="alarmReceiverStopRingingBtnText">Dismiss</string>
+</resources>
