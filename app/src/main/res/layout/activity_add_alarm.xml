@@ -25,7 +25,6 @@
         android:background="@drawable/alarm_desc_shape"
         android:layout_below="@id/alarmDesc"
         android:paddingBottom="@dimen/default_separation_between_categories"
-        android:editable="true"
         android:textSize="@dimen/abc_text_size_body_1_material"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLength="50"
@@ -76,29 +75,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/alarmIntervalTxt"
-        android:text="@string/alarmIntervalText"
-        android:layout_below="@id/layoutForTimePicker"
-        android:gravity="center"
-        android:paddingBottom="@dimen/default_separation_between_title_and_view"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/alarm_shapes"
-        android:layout_below="@id/alarmIntervalTxt"
-        android:id="@+id/intervalPickerBtn"
-        android:text="@string/alarmIntervalViewDefaultText"
-        android:onClick="onIntervalPickerBtnClick"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/alarmNumOccurrencesTxt"
         android:text="@string/alarmNumOccurrencesText"
-        android:layout_below="@id/intervalPickerBtn"
+        android:layout_below="@id/layoutForTimePicker"
         android:gravity="center"
-        android:paddingTop="@dimen/default_separation_between_categories"
         android:paddingBottom="@dimen/default_separation_between_title_and_view"/>
 
     <Spinner
@@ -112,12 +92,66 @@
         android:paddingTop="@dimen/default_separation_between_categories"
         android:paddingBottom="@dimen/default_separation_between_title_and_view"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmIntervalTxt"
+        android:text="@string/alarmIntervalText"
+        android:layout_below="@id/occurrencesPicker"
+        android:gravity="center"
+        android:visibility="gone"
+        android:paddingTop="@dimen/default_separation_between_categories"
+        android:paddingBottom="@dimen/default_separation_between_title_and_view"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alarm_shapes"
+        android:layout_below="@id/alarmIntervalTxt"
+        android:id="@+id/intervalPickerBtn"
+        android:visibility="gone"
+        android:onClick="onIntervalPickerBtnClick"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmStatusToggleTxt"
+        android:text="@string/alarmStatusToggleText"
+        android:layout_below="@id/intervalPickerBtn"
+        android:gravity="center"
+        android:paddingTop="@dimen/default_separation_between_categories"
+        android:paddingBottom="@dimen/default_separation_between_title_and_view"/>
+
+    <LinearLayout
+        android:id="@+id/layoutForSwitch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/intervalPickerBtn"
+        android:layout_toRightOf="@id/alarmStatusToggleTxt"
+        android:paddingBottom="@dimen/default_separation_between_categories">
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/alarmStatusToggleTxt"
+            android:layout_below="@id/intervalPickerBtn"
+            android:gravity="center"
+            android:paddingTop="@dimen/default_separation_between_categories"
+            android:paddingBottom="@dimen/default_separation_between_title_and_view"
+            android:id="@+id/enableSwitcher"
+            android:textOn="@string/alarmEnabledLabel"
+            android:textOff="@string/alarmDisabledLabel"
+            android:onClick="onAlarmToggleClick" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layoutForSubmit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_below="@id/alarmNumOccurrencesTxt"
+        android:layout_below="@id/alarmStatusToggleTxt"
         android:paddingTop="@dimen/default_separation_to_submit_btn">
 
         <Button
@@ -127,9 +161,8 @@
             android:gravity="center"
             android:paddingLeft="@dimen/alarm_activity_submit_btn_padding"
             android:paddingRight="@dimen/alarm_activity_submit_btn_padding"
-            android:layout_below="@id/occurrencesPicker"
+            android:layout_below="@id/enableSwitcher"
             android:id="@+id/submitAlarmBtn"
-            android:text="@string/submitAlarmBtnText"
             android:onClick="onSubmitAlarmClick"/>
 
     </LinearLayout>

@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/alarmReceiverTxt"
-        android:text="@string/alarmReceiverText"
         android:gravity="center"
         android:paddingBottom="@dimen/default_separation_to_submit_btn"/>
 
@@ -23,9 +22,33 @@
         android:layout_below="@id/alarmReceiverTxt"
         android:id="@+id/alarmReceiverDismissBtn"
         android:gravity="center"
+        android:layout_alignParentLeft="true"
         android:paddingLeft="@dimen/alarm_receiver_activity_stop_ringing_padding"
         android:paddingRight="@dimen/alarm_receiver_activity_stop_ringing_padding"
         android:text="@string/alarmReceiverStopRingingBtnText"
         android:onClick="onDismissClick"/>
+
+    <LinearLayout
+        android:id="@+id/layoutForSnooze"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/alarmReceiverTxt"
+        android:layout_toRightOf="@id/alarmReceiverDismissBtn"
+        android:paddingBottom="@dimen/default_separation_between_categories">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alarm_shapes"
+            android:layout_below="@id/alarmReceiverTxt"
+            android:layout_toRightOf="@id/alarmReceiverDismissBtn"
+            android:id="@+id/alarmReceiverSnoozeBtn"
+            android:gravity="center"
+            android:paddingLeft="@dimen/alarm_receiver_activity_stop_ringing_padding"
+            android:paddingRight="@dimen/alarm_receiver_activity_stop_ringing_padding"
+            android:text="@string/alarmReceiverSnoozeBtnText"
+            android:onClick="onSnoozeClick"/>
+    </LinearLayout>
 
 </RelativeLayout>

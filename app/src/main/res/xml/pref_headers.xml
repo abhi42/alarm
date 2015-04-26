@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="org.ap.android.alarm.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="org.ap.android.alarm.AlarmSettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general"/>
 
     <header
-        android:fragment="org.ap.android.alarm.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="org.ap.android.alarm.AlarmSettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications"/>
 
     <header
-        android:fragment="org.ap.android.alarm.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="org.ap.android.alarm.AlarmSettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync"/>
 
 </preference-headers>

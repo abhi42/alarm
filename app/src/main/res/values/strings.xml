@@ -22,4 +22,20 @@
 
     <string name="alarmReceiverText">Hi there, got </string>
     <string name="alarmReceiverStopRingingBtnText">Dismiss</string>
+    <string name="alarmReceiverSnoozeBtnText">Snooze</string>
+    <string name="title_activity_main_alarm">MainAlarmActivity</string>
+
+    <string name="alarmEnabledLabel">On</string>
+    <string name="alarmDisabledLabel">Off</string>
+    <string name="alarmStatusToggleText">Alarm is enabled</string>
+
+    <string name="submitEditAlarmBtnText">Done</string>
+
+    <string name="menuDeleteAlarm">Delete</string>
+
+    <string name="pref_snoozeIntervalTitle">Snooze interval</string>
+    <string name="pref_confirmOnDeleteTitle">Confirm alarm deletion</string>
+
+    <!-- not to be localised-->
+    <string name="pref_snoozeIntervalKey">pref_snoozeInterval</string>
 </resources>

@@ -1,38 +1,24 @@
 package org.ap.android.alarm;
 
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
-public class AlarmSettingsActivity extends Activity {
+public class AlarmSettingsActivity extends ActionBarActivity {
 
     private static final String TAG = AlarmSettingsActivity.class.getName();
 
     @Override
-    public void onCreate(final Bundle savedInstanceState, final PersistableBundle persistentState) {
-        Log.d(TAG, "in onCreate");
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_alarm_settings);
 
+        // using android.R.id.content does not work, hence using a dummy layout file R.id.settingsTopLevelView
         getFragmentManager().beginTransaction().replace(android.R.id.content, new
-                SettingsFragment()).commit();
+                AlarmSettingsFragment()).commit();
+        Log.d(TAG, "Replaced contents with those from preferences xml");
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    }
-
-    // use PreferenceFragment instead of PreferenceActivity as suggested by android documentation
-    public static class SettingsFragment extends PreferenceFragment {
-
-        @Override
-        public void onCreate(final Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
-            Log.d(TAG, "added preference from resource in settings fragment");
-            getActivity().getActionBar().setHomeButtonEnabled(true);
-        }
     }
 }

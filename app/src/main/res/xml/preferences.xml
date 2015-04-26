@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="@string/pref_snoozeIntervalKey"
+        android:title="@string/pref_snoozeIntervalTitle"
+        android:defaultValue="@integer/pref_snoozeIntervalDefaultValue"
+        android:entries="@array/pref_SnoozeIntervalEntries"
+        android:entryValues="@array/pref_SnoozeIntervalEntryValues"/>
 
 </PreferenceScreen>
