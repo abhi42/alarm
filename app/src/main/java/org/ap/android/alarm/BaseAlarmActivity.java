@@ -26,6 +26,9 @@ import java.util.TimeZone;
  */
 abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetrievedListener, AlarmUpdatedListener {
 
+    private static final int MODE_NEW_ALARM = 0;
+    private static final int MODE_EDIT_ALARM = 1;
+    private static final String TAG = BaseAlarmActivity.class.getName();
     private Button timePickerBtn;
     private DatePickerFragment datePickerFragment;
     private Button datePickerBtn;
@@ -33,7 +36,6 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
     private AlarmIntervalFragment alarmIntervalPickerFragment;
     private Spinner occurencesPicker;
     private Button alarmIntervalBtn;
-
     private int yr;
     private int month;
     private int day;
@@ -41,15 +43,9 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
     private int min;
     private int alarmInterval;
     private boolean isAlarmEnabled;
-
     private AlarmDbHelper alarmDbHelper;
     private AlarmDto dto;
     private int mode;
-
-    private static final int MODE_NEW_ALARM = 0;
-
-    private static final int MODE_EDIT_ALARM = 1;
-    private static final String TAG = BaseAlarmActivity.class.getName();
 
     protected abstract int getLayoutId();
 
@@ -120,7 +116,7 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
 
         final Spinner occurencesPicker = (Spinner) findViewById(R.id.occurrencesPicker);
         final String[] occurrencesOptions = getOccurrencesOptions();
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, occurrencesOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         occurencesPicker.setAdapter(adapter);
@@ -147,6 +143,7 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
 
         final Switch alarmEnableToggler = (Switch) findViewById(R.id.enableSwitcher);
         alarmEnableToggler.setChecked(dto.isEnabled());
+        setAlarmStatus(dto.isEnabled());
 
         final Button b = (Button) findViewById(R.id.submitAlarmBtn);
         if (MODE_EDIT_ALARM == mode) {
@@ -263,8 +260,7 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
     protected String getSelectedAlarmDesc() {
         final EditText alarmDescTxt = (EditText) findViewById(R.id.alarmDescTxt);
         final CharSequence text = alarmDescTxt.getText();
-        final String alarmDesc = text == null ? "" : text.toString();
-        return alarmDesc;
+        return text == null ? "" : text.toString();
     }
 
     protected int getSelectedInterval() {
@@ -344,7 +340,7 @@ abstract class BaseAlarmActivity extends ActionBarActivity implements AlarmRetri
 
     public void onAlarmToggleClick(final View v) {
         final Switch s = (Switch) v;
-        isAlarmEnabled = s.isChecked() ? true : false;
+        isAlarmEnabled = s.isChecked();
     }
 
     protected void setAlarmStatus(final boolean status) {

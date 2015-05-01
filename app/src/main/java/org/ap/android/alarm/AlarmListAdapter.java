@@ -22,11 +22,6 @@ import java.util.TimeZone;
  */
 public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.ViewHolder> {
 
-    private final AlarmDbHelper dbHelper;
-    private final MainAlarmActivity activity;
-    private Cursor c;
-    private final List<AlarmDto> alarms = new ArrayList<>();
-
     private static final String[] COLUMNS_TO_BE_RETRIEVED = {
             AlarmContract.AlarmEntry._ID,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_DESC,
@@ -35,11 +30,13 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_NUM_OCCURRENCES,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_INTERVAL,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_IS_ENABLED};
-
     private static final String SORT_ORDER = AlarmContract.AlarmEntry
             ._ID + " ASC";
-
     private static final String TAG = AlarmListAdapter.class.getName();
+    private final AlarmDbHelper dbHelper;
+    private final MainAlarmActivity activity;
+    private final List<AlarmDto> alarms = new ArrayList<>();
+    private Cursor c;
 
     public AlarmListAdapter(final MainAlarmActivity activity, final AlarmDbHelper dbHelper) {
         this.activity = activity;
@@ -72,7 +69,7 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         Log.d(TAG, "alarmId: " + alarmId);
         holder.setAlarmId(alarmId);
         holder.setAlarmDesc(alarmDesc);
-        handleAlarmsInThePast(holder, dto);
+        colourRowBackground(holder, dto);
     }
 
     private String getStartTime(final AlarmDto dto) {
@@ -81,11 +78,13 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         return AlarmUtils.formatDateTime(startTime, timeZoneId);
     }
 
-    private void handleAlarmsInThePast(final ViewHolder holder, final AlarmDto dto) {
-        final long startTime = dto.getStartTimeWithoutTz();
-        final String tzId = dto.getTz().getID();
-        final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(tzId));
-        c.setTime(new Date(startTime));
+    private void colourRowBackground(final ViewHolder holder, final AlarmDto dto) {
+        final Calendar c = createCalendarUsingAlarmStartTime(dto);
+        handleAlarmsInThePast(holder, dto, c);
+        handleEnabledAlarmsInTheFuture(holder, dto, c);
+    }
+
+    private void handleAlarmsInThePast(final ViewHolder holder, final AlarmDto dto, final Calendar c) {
         final Calendar now = Calendar.getInstance();
         if (c.before(now)) {
             // the alarm is in the past, check if any occurences are remaining
@@ -97,20 +96,39 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         }
     }
 
+    private void handleEnabledAlarmsInTheFuture(final ViewHolder holder, final AlarmDto dto, final Calendar c) {
+        if (!dto.isEnabled()) {
+            return;
+        }
+        final Calendar now = Calendar.getInstance();
+        if (c.after(now)) {
+            // holder.mParentView.setBackgroundColor(Color.argb(127, 255, 187, 51)); // holo_orange_light
+            holder.mParentView.setBackgroundColor(Color.argb(255, 51, 181, 229)); // #ff33b5e5 holo_blue_light
+        }
+    }
+
+    private Calendar createCalendarUsingAlarmStartTime(AlarmDto dto) {
+        final long startTime = dto.getStartTimeWithoutTz();
+        final String tzId = dto.getTz().getID();
+        final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(tzId));
+        c.setTime(new Date(startTime));
+        return c;
+    }
+
     private void setAlarmDescInView(final ViewHolder holder, final String text) {
-        final String trimmedText = text.trim();
-        if (text != null) {
-            final int trimmedLen = trimmedText.length();
-            final int maxLength = activity.getResources().getInteger(R.integer.list_alarm_desc_max_length);
-            final int diff = trimmedLen - maxLength;
-            if (diff > 0) {
-                final String textToBeDisplayed = trimmedText.substring(0, maxLength - 3) + "...";
-                holder.mAlarmDesc.setText(textToBeDisplayed);
-            } else {
-                holder.mAlarmDesc.setText(trimmedText);
-            }
-        } else {
+        if (text == null) {
             holder.mAlarmDesc.setText("");
+            return;
+        }
+        final String trimmedText = text.trim();
+        final int trimmedLen = trimmedText.length();
+        final int maxLength = activity.getResources().getInteger(R.integer.list_alarm_desc_max_length);
+        final int diff = trimmedLen - maxLength;
+        if (diff > 0) {
+            final String textToBeDisplayed = trimmedText.substring(0, maxLength - 3) + "...";
+            holder.mAlarmDesc.setText(textToBeDisplayed);
+        } else {
+            holder.mAlarmDesc.setText(trimmedText);
         }
     }
 

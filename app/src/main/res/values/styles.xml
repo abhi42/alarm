@@ -10,4 +10,10 @@
         <item name="android:colorPrimary">#ff5722</item>
     </style>
 
+    <style name="GrabAttentionText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">#0000FF</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:typeface">normal</item>
+        <item name="android:textSize">32sp</item>
+    </style>
 </resources>
