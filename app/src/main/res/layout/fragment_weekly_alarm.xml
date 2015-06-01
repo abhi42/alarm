@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/weeklyOccurrenceLayout">
+
+            <ToggleButton
+                android:id="@+id/Mon"
+                android:textOff="@string/monday_short"
+                android:textOn="@string/monday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Tue"
+                android:textOff="@string/tuesday_short"
+                android:textOn="@string/tuesday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Mon"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Sat"
+                android:textOff="@string/saturday_short"
+                android:textOn="@string/saturday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Mon"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Sun"
+                android:textOff="@string/sunday_short"
+                android:textOn="@string/sunday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Tue"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Wed"
+                android:textOff="@string/wednesday_short"
+                android:textOn="@string/wednesday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Sun"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Fri"
+                android:textOff="@string/friday_short"
+                android:textOn="@string/friday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Sun"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <ToggleButton
+                android:id="@+id/Thu"
+                android:textOff="@string/thursday_short"
+                android:textOn="@string/thursday_short"
+                android:background="@drawable/toggle_btn_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Wed"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/default_margin_between_weekdays_in_recurring_alarm"
+                android:onClick="onWeekDayClick"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/alarm_shapes"
+                android:layout_gravity="center"
+                android:layout_below="@id/Thu"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/default_separation_between_categories"
+                android:id="@+id/weeklyAlarmtimePickerBtn"
+                android:onClick="onTimePickerBtnClick"/>
+</RelativeLayout>
