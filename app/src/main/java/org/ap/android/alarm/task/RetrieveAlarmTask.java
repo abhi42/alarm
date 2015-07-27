@@ -1,23 +1,24 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.task;
 
 import android.database.Cursor;
 import android.os.AsyncTask;
 
-import java.util.TimeZone;
+import org.ap.android.alarm.db.AlarmDbHelper;
+import org.ap.android.alarm.db.IAlarmOperationInDbListener;
+import org.ap.android.alarm.dto.AlarmDto;
 
 /**
  * Created by abhi on 01.03.15.
  */
 public class RetrieveAlarmTask extends AsyncTask<Long, Void, AlarmDto> {
 
+    private static final String TAG = RetrieveAlarmTask.class.getName();
     private final AlarmDbHelper dbHelper;
     private final String[] colsToRetrieve;
-    private final AlarmRetrievedListener listener;
+    private final IAlarmOperationInDbListener listener;
 
-    private static final String TAG = RetrieveAlarmTask.class.getName();
-
-    RetrieveAlarmTask(final AlarmRetrievedListener alarmRetrievedListener, final AlarmDbHelper dbHelper, final String[] colsToRetrieve) {
-        this.listener = alarmRetrievedListener;
+    public RetrieveAlarmTask(final IAlarmOperationInDbListener listener, final AlarmDbHelper dbHelper, final String[] colsToRetrieve) {
+        this.listener = listener;
         this.dbHelper = dbHelper;
         this.colsToRetrieve = colsToRetrieve;
     }
@@ -30,7 +31,7 @@ public class RetrieveAlarmTask extends AsyncTask<Long, Void, AlarmDto> {
 
     @Override
     protected void onPostExecute(final AlarmDto dto) {
-        listener.handleAlarmObtainedFromDb(dto);
+        listener.onRetrieveOperationPerformed(dto);
     }
 
     private AlarmDto createDto(final Cursor c) {

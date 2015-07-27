@@ -1,9 +1,12 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.db;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.ap.android.alarm.dto.AlarmDto;
+import org.ap.android.alarm.task.BaseAlarmInDbTask;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,14 +16,13 @@ import java.util.Date;
  */
 public class UpdateAlarmInDbTask extends AsyncTask<AlarmDto, Void, Boolean> {
 
+    private static final String TAG = UpdateAlarmInDbTask.class.getName();
     private final AlarmDbHelper dbHelper;
-    private final AlarmUpdatedListener listener;
+    private final IAlarmOperationInDbListener listener;
     private final BaseAlarmInDbTask helper;
 
-    private static final String TAG = UpdateAlarmInDbTask.class.getName();
-
-    UpdateAlarmInDbTask(final AlarmUpdatedListener alarmUpdatedListener, final AlarmDbHelper dbHelper) {
-        this.listener = alarmUpdatedListener;
+    public UpdateAlarmInDbTask(final IAlarmOperationInDbListener listener, final AlarmDbHelper dbHelper) {
+        this.listener = listener;
         this.dbHelper = dbHelper;
         this.helper = new BaseAlarmInDbTask();
     }
@@ -37,19 +39,15 @@ public class UpdateAlarmInDbTask extends AsyncTask<AlarmDto, Void, Boolean> {
         try {
             final int numRowsUpdated = db.update(AlarmContract.AlarmEntry.TABLE_NAME, values,
                     AlarmContract.AlarmEntry._ID + "=?", ids);
-            Log.d(TAG, "number of rows updated: " + numRowsUpdated);
-            if (numRowsUpdated == 1) {
-                return true;
-            }
-            return false;
+            return numRowsUpdated == 1;
         } finally {
             dbHelper.close();
         }
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        listener.handleAlarmUpdatedInDb(aBoolean);
+    protected void onPostExecute(final Boolean success) {
+        listener.onUpdateOperationPerformed(success);
     }
 
     private void logStartTime(final AlarmDto dto) {

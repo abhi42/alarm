@@ -1,10 +1,12 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.ui;
 
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+
+import org.ap.android.alarm.R;
 
 public class AlarmSettingsActivity extends ActionBarActivity {
 

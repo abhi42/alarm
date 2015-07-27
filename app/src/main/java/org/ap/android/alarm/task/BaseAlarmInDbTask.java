@@ -1,6 +1,11 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.task;
 
 import android.content.ContentValues;
+
+import org.ap.android.alarm.common.AlarmType;
+import org.ap.android.alarm.common.AlarmUtils;
+import org.ap.android.alarm.db.AlarmContract;
+import org.ap.android.alarm.dto.AlarmDto;
 
 import java.util.Calendar;
 
@@ -13,7 +18,7 @@ public class BaseAlarmInDbTask {
         return Calendar.getInstance().getTimeZone().getID();
     }
 
-    ContentValues createContentValues(final AlarmDto dto) {
+    public ContentValues createContentValues(final AlarmDto dto) {
         final ContentValues values = new ContentValues();
         final long id = dto.getId();
         if (id == -1) {
@@ -21,24 +26,32 @@ public class BaseAlarmInDbTask {
         } else {
             values.put(AlarmContract.AlarmEntry._ID, id);
         }
+        values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TYPE, dto.getType().name());
         values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_DESC, dto.getDescription());
+        if (AlarmType.WEEKLY == dto.getType()) {
+            values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_WEEKDAYS, dto.getWeekdaysRepAsString());
+        }
         values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_START_TIME,
                 dto.getStartTimeWithoutTz());
         values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TIME_ZONE, getTimezone());
-        values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_NUM_OCCURRENCES,
-                dto.getNumOccurrences());
-        values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_INTERVAL, dto.getInterval());
+        if (AlarmType.DAILY == dto.getType()) {
+            values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_NUM_OCCURRENCES,
+                    dto.getNumOccurrences());
+            values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_INTERVAL, dto.getInterval());
+        }
         values.put(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_IS_ENABLED, dto.isEnabled());
 
         return values;
     }
 
-    String getAlarmIdToUpdate(final ContentValues values) {
+    public String getAlarmIdToUpdate(final ContentValues values) {
         return values.getAsString(AlarmContract.AlarmEntry._ID);
     }
 
-    String getContentValuesAsString(final ContentValues values) {
+    public String getContentValuesAsString(final ContentValues values) {
+        final String alarmTypeStr = values.getAsString(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TYPE);
         final String desc = values.getAsString(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_DESC);
+        final String weekDays = values.getAsString(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_WEEKDAYS);
         final Long startTime = values.getAsLong(AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_START_TIME);
         final String tz = values.getAsString(AlarmContract.AlarmEntry
                 .COLUMN_NAME_ALARM_TIME_ZONE);
@@ -51,8 +64,14 @@ public class BaseAlarmInDbTask {
 
         final StringBuilder b = new StringBuilder();
 
-        b.append("Alarm description: ");
+        b.append("Alarm type: ");
+        b.append(alarmTypeStr);
+
+        b.append(", Alarm description: ");
         b.append(desc);
+
+        b.append(", Alarm weekdays: ");
+        b.append(weekDays);
 
         b.append(", alarm start time: ");
         final String formattedDateTime = AlarmUtils.formatDateTime(startTime, tz);

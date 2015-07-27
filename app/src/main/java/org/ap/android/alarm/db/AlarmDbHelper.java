@@ -1,4 +1,4 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.db;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -22,7 +22,9 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE = "CREATE TABLE " + AlarmContract.AlarmEntry
             .TABLE_NAME
             + " (" + AlarmContract.AlarmEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP
+            + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TYPE + TEXT_TYPE + COMMA_SEP
             + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_DESC + TEXT_TYPE + COMMA_SEP
+            + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_WEEKDAYS + TEXT_TYPE + COMMA_SEP
             + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_START_TIME + DATE_TYPE + COMMA_SEP
             + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TIME_ZONE + TEXT_TYPE + COMMA_SEP
             + AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_NUM_OCCURRENCES + INTEGER_TYPE + COMMA_SEP
@@ -47,7 +49,7 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
         // not yet needed
     }
 
-    Cursor getAlarm(final long alarmId, final String[] colsToRetrieve) {
+    public Cursor getAlarm(final long alarmId, final String[] colsToRetrieve) {
         Log.d(TAG, "About to retrieve details for alarm with id " + alarmId);
         final SQLiteDatabase db = getReadableDatabase();
         final Cursor cursor = db.query(AlarmContract.AlarmEntry.TABLE_NAME, colsToRetrieve, AlarmContract.AlarmEntry._ID + "=?",
@@ -58,7 +60,7 @@ public class AlarmDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    boolean isCursorUseable(final Cursor c) {
+    public boolean isCursorUseable(final Cursor c) {
         if (c == null) {
             Log.w(TAG, "Cursor for alarm obtained from db is null");
             return false;

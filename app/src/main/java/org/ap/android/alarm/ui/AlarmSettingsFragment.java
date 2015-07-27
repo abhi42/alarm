@@ -1,10 +1,12 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
+
+import org.ap.android.alarm.R;
+import org.ap.android.alarm.common.AlarmUtils;
 
 import java.text.MessageFormat;
 
@@ -25,7 +27,6 @@ public class AlarmSettingsFragment extends PreferenceFragment implements SharedP
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
         setSummary();
-        Log.d(TAG, "read preferences from xml");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.ui;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -19,10 +19,9 @@ public class TimePickerFragment extends BaseDialogFragment implements TimePicker
     private static final String TAG = TimePickerFragment.class.getName();
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Calendar cal = activity.getSelectedDateTime();
-        final int hr = cal.get(Calendar.HOUR_OF_DAY);
-        final int min = cal.get(Calendar.MINUTE);
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final int hr = alarmDateTimeDto.getAlarmHr();
+        final int min = alarmDateTimeDto.getAlarmMinute();
 
         final TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), this, hr,
                 min, DateFormat.is24HourFormat(getActivity()));
@@ -46,23 +45,27 @@ public class TimePickerFragment extends BaseDialogFragment implements TimePicker
             updateValue = true;
         }
         Log.d(TAG, "hrOfDay: " + hourOfDay + ", min: " + minute + ", updateValue: " + updateValue
-                + ", activity: " + activity.getClass().getName());
-        if (activity != null && updateValue) {
-            activity.setTime(hourOfDay, minute);
+                + ", alarmDateTimeDto: " + alarmDateTimeDto.getClass().getName());
+        if (alarmDateTimeDto != null && updateValue) {
+            alarmDateTimeDto.setAlarmTime(hourOfDay, minute);
         }
     }
 
     @Override
-    protected void postSetActivity() {
+    protected void postSetAlarmDateTimeDto() {
+        final int alarmHr = alarmDateTimeDto.getAlarmHr();
+        final int alarmMinute = alarmDateTimeDto.getAlarmMinute();
+        if (alarmHr > 0 || alarmMinute > 0) {
+            return;
+        }
         final Calendar cal = Calendar.getInstance();
         final int hr = cal.get(Calendar.HOUR_OF_DAY);
         final int min = cal.get(Calendar.MINUTE);
-        activity.setTime(hr, min);
+        alarmDateTimeDto.setAlarmTime(hr, min);
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
-        Log.d(TAG, "onClick callback handler invoked...");
+    public void onClick(final DialogInterface dialog, final int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 updateValue = true;

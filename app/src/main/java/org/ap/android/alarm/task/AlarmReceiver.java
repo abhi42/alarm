@@ -1,8 +1,11 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.task;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import org.ap.android.alarm.common.AlarmUtils;
+import org.ap.android.alarm.ui.AlarmReceiverActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

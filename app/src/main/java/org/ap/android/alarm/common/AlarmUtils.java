@@ -1,4 +1,4 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.common;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -9,6 +9,12 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import org.ap.android.alarm.R;
+import org.ap.android.alarm.db.AlarmDbHelper;
+import org.ap.android.alarm.db.DeleteAlarmInDbTask;
+import org.ap.android.alarm.dto.AlarmDto;
+import org.ap.android.alarm.task.AlarmReceiver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,25 +27,35 @@ import java.util.TimeZone;
  */
 public class AlarmUtils {
 
+    public static final String ALARM_DESC = "alarmDesc";
+    public static final String ALARM_ID_BEING_PASSED = "alarmId";
+    public static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("E, LLL dd, yyyy");
+    public static final DateFormat DEFAULT_TIME_FORMAT = new SimpleDateFormat("HH:mm");
+    public static final DateFormat DEFAULT_DATE_TIME_FORMAT = new SimpleDateFormat("E, LLL dd, " +
+            "HH:mm");
+    private static final String TAG = AlarmUtils.class.getName();
     // don't use these variable directly, use their getOrCreate() methods
     private static String prefSnoozeIntervalKey;
     private static Integer prefDefaultSnoozeInterval;
 
-    public static final String ALARM_DESC = "alarmDesc";
+    public static String formatTime(final int hr, final int minute) {
+        final Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hr);
+        c.set(Calendar.MINUTE, minute);
+        return DEFAULT_TIME_FORMAT.format(c.getTime());
+    }
 
-    public static final String ALARM_ID_BEING_PASSED = "alarmId";
-    public static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("E, LLL dd, yyyy");
-    public static final DateFormat DEFAULT_TIME_FORMAT = new SimpleDateFormat("HH:mm");
-
-    public static final DateFormat DEFAULT_DATE_TIME_FORMAT = new SimpleDateFormat("E, LLL dd, " +
-            "HH:mm");
-
-    private static final String TAG = AlarmUtils.class.getName();
+    public static String formatDate(final int year, final int month, final int day) {
+        final Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        return DEFAULT_DATE_FORMAT.format(cal.getTime());
+    }
 
     private static PendingIntent createPendingIntent(final Context context, final long alarmId, final String alarmDesc) {
         // TODO when multiple alarms are allowed, their pending intents have to be different
         // see documentation of PendingIntent class. In this case, change the request code
         // so that it uniquely identifies the pending intent to a particular alarm.
+        Log.d(TAG, "Alarm id being set in intent that is created: " + alarmId);
         final Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra(ALARM_ID_BEING_PASSED, alarmId);
         intent.putExtra(ALARM_DESC, alarmDesc);
@@ -47,26 +63,26 @@ public class AlarmUtils {
         return PendingIntent.getBroadcast(context, 42, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    static void createAlarm(final Context context, final long alarmId,
-                            Calendar selectedDateTime, final int intervalInMinutesToNextAlarm,
-                            final int numOccurrences, final String alarmDesc) {
-        createInitialAlarm(context, alarmId, selectedDateTime, intervalInMinutesToNextAlarm,
-                numOccurrences,
-                alarmDesc);
+    public static void createAlarmInSystem(final Context context, final AlarmDto dto) {
+        final AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        final PendingIntent pendingIntent = createPendingIntent(context, dto.getId(), dto.getDescription());
+        final long startTimeWithoutTz = dto.getStartTimeWithoutTz();
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, startTimeWithoutTz, pendingIntent);
     }
 
-    static void createInitialAlarm(final Context context, final long alarmId, final Calendar c,
-                                   final int intervalInMinutesToNextAlarm,
-                                   final int numOccurrences, final String alarmDesc) {
+    public static void updateAlarmInSystem(final Context context, final AlarmDto dto) {
+        cancelAlarmInSystem(context, dto);
+        createAlarmInSystem(context, dto);
+    }
+
+    public static void cancelAlarmInSystem(final Context context, final AlarmDto dto) {
         final AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context
                 .ALARM_SERVICE);
-        final PendingIntent pendingIntent = createPendingIntent(context,
-                alarmId, alarmDesc);
-        logAlarmDetails(c, alarmId, intervalInMinutesToNextAlarm, numOccurrences, alarmDesc);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, c.getTime().getTime(), pendingIntent);
+        final PendingIntent pendingIntent = createPendingIntent(context, dto.getId(), dto.getDesc());
+        alarmMgr.cancel(pendingIntent);
     }
 
-    static void cancelAlarm(final Context context, final long alarmId, final String alarmDesc) {
+    public static void cancelAlarm(final Context context, final long alarmId, final String alarmDesc) {
         final AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context
                 .ALARM_SERVICE);
         final PendingIntent pendingIntent = createPendingIntent(context,
@@ -74,29 +90,44 @@ public class AlarmUtils {
         alarmMgr.cancel(pendingIntent);
     }
 
-    static String formatDateTime(final long time, final String timeZoneId) {
-        final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZoneId));
-        cal.setTime(new Date(time));
+    public static String formatDateTime(final long time, final String timeZoneId) {
+        final Calendar cal = getCalendar(time, timeZoneId);
         return AlarmUtils.DEFAULT_DATE_TIME_FORMAT.format(cal.getTime());
     }
 
-    static Calendar getCalendar(final long timeWithoutTimezone, final TimeZone tz) {
+    private static Calendar getCalendar(long time, String timeZoneId) {
+        final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZoneId));
+        cal.setTime(new Date(time));
+        return cal;
+    }
+
+    public static String formatTime(final long time, final String timeZoneId) {
+        final Calendar cal = getCalendar(time, timeZoneId);
+        return AlarmUtils.DEFAULT_TIME_FORMAT.format(cal.getTime());
+    }
+
+    public static String formatDate(final long time, final String timeZoneId) {
+        final Calendar cal = getCalendar(time, timeZoneId);
+        return AlarmUtils.DEFAULT_DATE_FORMAT.format(cal.getTime());
+    }
+
+    public static Calendar getCalendar(final long timeWithoutTimezone, final TimeZone tz) {
         final Calendar c = Calendar.getInstance(tz);
         c.setTime(new Date(timeWithoutTimezone));
         return c;
     }
 
-    static void deleteAlarm(final Context context, final long alarmId, final String alarmDesc) {
+    public static void deleteAlarm(final Context context, final long alarmId, final String alarmDesc) {
         deleteAlarm(context, new AlarmDbHelper(context), alarmId, alarmDesc);
     }
 
-    static void deleteAlarm(final Context context, final AlarmDbHelper dbHelper, final long alarmId, final String alarmDesc) {
+    public static void deleteAlarm(final Context context, final AlarmDbHelper dbHelper, final long alarmId, final String alarmDesc) {
         cancelAlarm(context, alarmId, alarmDesc);
         final AlarmDto dto = new AlarmDto(alarmId, alarmDesc, null, -1, -1, false);
         new DeleteAlarmInDbTask(dbHelper).execute(dto);
     }
 
-    static int getSnoozeIntervalInMilliSeconds(final Activity activity) {
+    public static int getSnoozeIntervalInMilliSeconds(final Activity activity) {
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(activity);
         final String snoozeIntervalKeyLocal = getOrCreateSnoozeIntervalKey(activity);
@@ -106,7 +137,7 @@ public class AlarmUtils {
         return Integer.valueOf(currentSnoozeInterval) * 60 *1000;
     }
 
-    static String getOrCreateSnoozeIntervalKey(final Activity activity) {
+    public static String getOrCreateSnoozeIntervalKey(final Activity activity) {
         if (prefSnoozeIntervalKey == null) {
             createSnoozeIntervalKey(activity);
         }
@@ -119,7 +150,7 @@ public class AlarmUtils {
                 .pref_snoozeIntervalKey);
     }
 
-    static int getOrCrateDefaultSnoozeInterval(final Activity activity) {
+    public static int getOrCrateDefaultSnoozeInterval(final Activity activity) {
         if (prefDefaultSnoozeInterval == null) {
             createDefaultSnoozeInterval(activity);
         }
@@ -161,5 +192,11 @@ public class AlarmUtils {
         b.append(", desc: ");
         b.append(alarmDesc);
         Log.d(TAG, "Alarm about to be created with the following details: " + b.toString());
+    }
+
+    public static long getNextAlarmTimeForWeeklyAlarm(final AlarmDto dto) {
+        final int numberOfDaysToNextEnabled = WeekDayHelper.getNumberOfDaysToNextEnabled(dto.getTz(), dto.getStartTimeWithoutTz(), dto.getWeekDays());
+        Log.d(TAG, "number of days to alarm: " + numberOfDaysToNextEnabled);
+        return dto.getStartTimeWithoutTz() + (numberOfDaysToNextEnabled * 24 * 60 * 60 * 1000);
     }
 }

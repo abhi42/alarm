@@ -1,4 +1,4 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,21 +6,23 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.ap.android.alarm.R;
+import org.ap.android.alarm.common.AlarmUtils;
+import org.ap.android.alarm.db.AlarmDbHelper;
+
 
 public class MainAlarmActivity extends ActionBarActivity {
 
+    private static final String TAG = MainAlarmActivity.class.getName();
     private RecyclerView mRecyclerView;
     private AlarmListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-
-    private static final String TAG = MainAlarmActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class MainAlarmActivity extends ActionBarActivity {
     }
 
     public void onClickAddAlarm(final View view) {
-        final Intent intent = new Intent(this, AddAlarmActivity.class);
+        final Intent intent = new Intent(this, AddSingleAlarmActivity.class);
         startActivity(intent);
     }
 
@@ -99,7 +101,7 @@ public class MainAlarmActivity extends ActionBarActivity {
     }
 
     void onRowClicked(final long alarmId) {
-        final Intent intent = new Intent(this, UpdateAlarmActivity.class);
+        final Intent intent = new Intent(this, EditSingleAlarmActivity.class);
         intent.putExtra(AlarmUtils.ALARM_ID_BEING_PASSED, alarmId);
         startActivity(intent);
     }
@@ -115,7 +117,7 @@ public class MainAlarmActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify a parent alarmDateTimeDto in AndroidManifest.xml.
         final int id = item.getItemId();
 
         switch (id) {

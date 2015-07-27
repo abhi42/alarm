@@ -1,25 +1,26 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+
+import org.ap.android.alarm.dto.AlarmDto;
 
 /**
  * Created by abhi on 14.03.15.
  */
 public class DeleteAlarmInDbTask extends AsyncTask<AlarmDto, Void, Boolean> {
 
-    private final AlarmDbHelper dbHelper;
-    private final BaseAlarmActivity activity;
-
     private static final String selection = AlarmContract.AlarmEntry._ID + " LIKE ?";
+    //    private final BaseIAlarmActivity activity;
+    private final AlarmDbHelper dbHelper;
 
-    DeleteAlarmInDbTask(final BaseAlarmActivity activity, final AlarmDbHelper dbHelper) {
-        this.activity = activity;
+//    public DeleteAlarmInDbTask(final BaseIAlarmActivity activity, final AlarmDbHelper dbHelper) {
+//        this.activity = activity;
+//        this.dbHelper = dbHelper;
+//    }
+
+    public DeleteAlarmInDbTask(final AlarmDbHelper dbHelper) {
         this.dbHelper = dbHelper;
-    }
-
-    DeleteAlarmInDbTask(final AlarmDbHelper dbHelper) {
-        this(null, dbHelper);
     }
 
     @Override
@@ -32,8 +33,8 @@ public class DeleteAlarmInDbTask extends AsyncTask<AlarmDto, Void, Boolean> {
 
     @Override
     protected void onPostExecute(final Boolean aBoolean) {
-        if (activity != null) {
-            activity.onAlarmDeleted(aBoolean);
-        }
+//        if (activity != null) {
+//            activity.onAlarmDeleted(aBoolean);
+//        }
     }
 }

@@ -1,15 +1,22 @@
-package org.ap.android.alarm;
+package org.ap.android.alarm.ui;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.ap.android.alarm.R;
+import org.ap.android.alarm.common.AlarmType;
+import org.ap.android.alarm.common.AlarmUtils;
+import org.ap.android.alarm.common.WeekDayHelper;
+import org.ap.android.alarm.db.AlarmContract;
+import org.ap.android.alarm.db.AlarmDbHelper;
+import org.ap.android.alarm.dto.AlarmDto;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +31,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
 
     private static final String[] COLUMNS_TO_BE_RETRIEVED = {
             AlarmContract.AlarmEntry._ID,
+            AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TYPE,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_DESC,
+            AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_WEEKDAYS,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_START_TIME,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_TIME_ZONE,
             AlarmContract.AlarmEntry.COLUMN_NAME_ALARM_NUM_OCCURRENCES,
@@ -33,6 +42,9 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
     private static final String SORT_ORDER = AlarmContract.AlarmEntry
             ._ID + " ASC";
     private static final String TAG = AlarmListAdapter.class.getName();
+
+    private static final int TIME_MAX_LEN = 54;
+
     private final AlarmDbHelper dbHelper;
     private final MainAlarmActivity activity;
     private final List<AlarmDto> alarms = new ArrayList<>();
@@ -61,21 +73,45 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
     private void setInView(final ViewHolder holder, final AlarmDto dto) {
         final String alarmDesc = dto.getDescription();
         setAlarmDescInView(holder, alarmDesc);
-        holder.mStartTime.setText(getStartTime(dto));
+
+        setTimeInView(holder, dto);
+
         final String isEnabledStr = dto.isEnabled() ? activity.getString(R.string
                 .alarmEnabledLabel) : activity.getString(R.string.alarmDisabledLabel);
         holder.mIsAlarmEnabled.setText(isEnabledStr);
         final long alarmId = dto.getId();
-        Log.d(TAG, "alarmId: " + alarmId);
         holder.setAlarmId(alarmId);
         holder.setAlarmDesc(alarmDesc);
         colourRowBackground(holder, dto);
     }
 
+    private void setTimeInView(final AlarmListAdapter.ViewHolder holder, final AlarmDto dto) {
+        final String time = getStartTime(dto);
+        holder.mStartTime.setText(time);
+    }
+
     private String getStartTime(final AlarmDto dto) {
         final long startTime = dto.getStartTimeWithoutTz();
         final String timeZoneId = dto.getTz().getID();
-        return AlarmUtils.formatDateTime(startTime, timeZoneId);
+
+        if (AlarmType.WEEKLY == dto.getType() && !dto.isAnyWeekdayEnabled()) {
+            // meaningless weekday alarm
+            return AlarmUtils.formatTime(startTime, timeZoneId) + " No week day set";
+        }
+
+        final String time = AlarmUtils.formatDateTime(startTime, timeZoneId) + getWeeklyDisplayString(dto);
+        return time;
+    }
+
+    private String getWeeklyDisplayString(final AlarmDto dto) {
+        if (AlarmType.WEEKLY == dto.getType()) {
+            final boolean[] weekDays = dto.getWeekDays();
+            final String enabledWeekDaysString = WeekDayHelper.getEnabledWeekDaysString(", ", weekDays);
+            if (enabledWeekDaysString.length() > 0) {
+                return " (" + enabledWeekDaysString + ")";
+            }
+        }
+        return "";
     }
 
     private void colourRowBackground(final ViewHolder holder, final AlarmDto dto) {
@@ -142,8 +178,6 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
         c = db.query(AlarmContract.AlarmEntry.TABLE_NAME, COLUMNS_TO_BE_RETRIEVED,
                 null, null, null, null, SORT_ORDER);
         createDtos(c);
-        final String str = c == null ? "cursor is null" : "cursor has " + c.getCount() + " item(s)";
-        Log.d(TAG, "Obtained cursor, " + str);
     }
 
     private void createDtos(final Cursor c) {
@@ -193,7 +227,6 @@ public class AlarmListAdapter extends RecyclerView.Adapter<AlarmListAdapter.View
             AlarmUtils.deleteAlarm(activity, alarmId, alarmDesc);
             notifyItemRemoved(getPosition());
             alarms.remove(getPosition());
-//            notifyItemRangeChanged(getPosition(), getItemCount());
         }
 
         private void setAlarmId(final long alarmId) {

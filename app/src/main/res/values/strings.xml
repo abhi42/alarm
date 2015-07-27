@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ApaAlarm</string>
+    <string name="app_name">ApaAlarm Plus</string>
 
     <string name="action_settings">Settings</string>
 
@@ -36,6 +36,26 @@
     <string name="pref_snoozeIntervalTitle">Snooze interval</string>
     <string name="pref_confirmOnDeleteTitle">Confirm alarm deletion</string>
 
+    <!-- additional functionality related to recurring alarms and reminders-->
+
+    <string name="choice_alarm_type_weekly_text">Weekly</string>
+    <string name="choice_alarm_type_monthly_text">Monthly</string>
+    <string name="choice_alarm_type_repetitive_text">Daily</string>
+
+    <string name="sunday_short">Sun</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+
+    <string name="setRecurrenceOkBtnText">Ok</string>
+    <string name="setRecurrenceCancelBtnText">Cancel</string>
+    <!-- end addtional functionality-->
+
     <!-- not to be localised-->
     <string name="pref_snoozeIntervalKey">pref_snoozeInterval</string>
+    <string name="title_activity_test_reccurence">TestReccurenceActivity</string>
+
 </resources>

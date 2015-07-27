@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- do not include android:drawable="...."  as an attribute of <item>,
+    including it makes the shape redundant, and it is not considered
+     i.e. DONT do this
+     <item android:state_checked="false" android:drawable="@color/red"  />
+    -->
+    <item android:state_checked="true">
+        <shape android:shape="oval">
+            <gradient android:endColor="#000000FF" android:gradientRadius="100" android:startColor="#FF00FF00" android:type="radial" />
+            <!--solid android:color="@color/color_button_state_selected"/-->
+        </shape>
+    </item>
+    <item android:state_checked="false">
+        <shape>
+            <gradient android:endColor="#00FFB6C1" android:gradientRadius="150" android:startColor="#FFFF69B4" android:type="radial" />
+            <!--solid android:color="@color/color_button_state_unselected"/-->
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
 </selector>

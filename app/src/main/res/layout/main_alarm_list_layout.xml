@@ -5,55 +5,58 @@
               android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- since layout_weight is specified, not specifying layout_width -->
+        <TextView
+            android:id="@+id/alarmListAlarmStartTimeField"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="80"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:maxLines="1" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/alarmListAlarmEnabledField"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:id="@+id/alarmListAlarmStartTimeField"
-            android:maxLength="20"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"/>
-
-            <!-- right margin to prevent sticking to the right side of the layout
-                gravity=end so that the text is as much to the right as possible, except for the margin
-            -->
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/alarmListAlarmEnabledField"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+            android:layout_weight="8"
+            android:gravity="center" />
 
         <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_delete_black"
-                android:id="@+id/alarmListDeleteAlarmIcon"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+            android:id="@+id/alarmListDeleteAlarmIcon"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="12"
+            android:src="@drawable/ic_delete_black" />
+
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/alarmListAlarmDescField"
-        android:maxLength="@integer/list_alarm_desc_max_length"
-        android:textSize="17sp"
-        android:maxLines="1"
-        android:ellipsize="marquee"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:maxLength="@integer/list_alarm_desc_max_length"
+        android:maxLines="1"
+        android:textSize="17sp" />
 
     <ImageView
+        android:id="@+id/alarmListDivider"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/alarm_list_divider_shape"
-        android:id="@+id/alarmListDivider"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:src="@drawable/alarm_list_divider_shape" />
 </LinearLayout>
