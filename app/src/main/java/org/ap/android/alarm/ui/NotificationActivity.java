@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import org.ap.android.alarm.R;
 import org.ap.android.alarm.common.AlarmUtils;
 
 /**
@@ -26,7 +27,7 @@ public class NotificationActivity extends Activity {
 
     private void createNotification(final long alarmId, final String alarmDesc) {
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.presence_video_away)
+                .setSmallIcon(R.drawable.alarm_logo)
                 .setContentTitle("Missed Alarm")
                 .setContentText(alarmDesc)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
