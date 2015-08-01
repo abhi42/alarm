@@ -44,6 +44,11 @@
             android:label="Edit Alarm"
             android:parentActivityName=".ui.MainAlarmActivity"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ui.NotificationActivity"
+            android:label="Alarm Notification Activity"
+            android:parentActivityName=".ui.MainAlarmActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
     </application>
 
 </manifest>

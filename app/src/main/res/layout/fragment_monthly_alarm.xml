@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/alarmStartTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="@dimen/default_separation_between_title_and_view"
+        android:paddingTop="@dimen/default_separation_between_categories"
+        android:text="@string/alarmStartText" />
+
+    <LinearLayout
+        android:id="@+id/layoutForTimePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="@dimen/default_separation_between_categories">
+
+        <!--dummy view to place the date and time picker buttons spaced equally horizontally-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"></View>
+
+        <Button
+            android:id="@+id/datePickerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alarm_shapes"
+            android:onClick="onDatePickerBtnClick"
+            android:paddingLeft="@dimen/alarm_activity_date_picker_padding"
+            android:paddingRight="@dimen/alarm_activity_date_picker_padding" />
+
+        <!--dummy view to place the date and time picker buttons spaced equally horizontally-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"></View>
+
+        <Button
+            android:id="@+id/timePickerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/alarm_shapes"
+            android:onClick="onTimePickerBtnClick"
+            android:paddingLeft="@dimen/alarm_activity_time_picker_padding"
+            android:paddingRight="@dimen/alarm_activity_time_picker_padding" />
+
+        <!--dummy view to place the date and time picker buttons spaced equally horizontally-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"></View>
+    </LinearLayout>
+
+</LinearLayout>

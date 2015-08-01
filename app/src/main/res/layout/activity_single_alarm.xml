@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/singleActivityTopLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/default_separation_between_categories">
+
+        <RadioGroup
+            android:id="@+id/alarmTypeGroupWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_separation_between_categories"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/choiceAlarmTypeWeekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onClickChooseAlarmType"
+                android:text="@string/choice_alarm_type_weekly_text" />
+
+            <RadioButton
+                android:id="@+id/choiceAlarmTypeMonthly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClickChooseAlarmType"
+                android:text="@string/choice_alarm_type_monthly_text" />
+
+            <RadioButton
+                android:id="@+id/choiceAlarmTypeDaily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClickChooseAlarmType"
+                android:text="@string/choice_alarm_type_repetitive_text" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/alarmDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/alarmTypeGroupWidget"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:paddingBottom="@dimen/default_separation_between_title_and_view"
+            android:text="@string/alarmDescText" />
+
+        <EditText
+            android:id="@+id/alarmDescTxt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/alarmDesc"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/alarm_desc_shape"
+            android:gravity="center"
+            android:hint="@string/alarmDescHint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:lines="3"
+            android:maxLength="50"
+            android:paddingBottom="@dimen/default_separation_between_categories"
+            android:textAppearance="@color/primary_text_default_material_light"
+            android:textSize="@dimen/abc_text_size_body_1_material" />
+
+        <LinearLayout
+            android:id="@+id/specificAlarmTypeFragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/alarmDescTxt"
+            android:layout_marginTop="@dimen/default_separation_between_categories"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@+id/alarmStatusToggleTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/specificAlarmTypeFragmentContainer"
+            android:layout_margin="@dimen/default_separation_between_categories"
+            android:gravity="fill_horizontal"
+            android:text="@string/alarmStatusToggleText" />
+
+        <LinearLayout
+            android:id="@+id/layoutForSwitch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/specificAlarmTypeFragmentContainer"
+            android:layout_toRightOf="@id/alarmStatusToggleTxt"
+            android:gravity="center">
+
+            <Switch
+                android:id="@+id/enableSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/default_separation_between_categories"
+                android:textOff="@string/alarmDisabledLabel"
+                android:textOn="@string/alarmEnabledLabel" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submitAlarmBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layoutForSwitch"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@drawable/alarm_submit_btn_shape"
+            android:gravity="center"
+            android:onClick="onSubmitAlarmClick"
+            android:paddingLeft="@dimen/alarm_activity_submit_btn_padding"
+            android:paddingRight="@dimen/alarm_activity_submit_btn_padding" />
+
+    </RelativeLayout>
+</ScrollView>

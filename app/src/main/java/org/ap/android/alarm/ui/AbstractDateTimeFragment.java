@@ -1,9 +1,11 @@
 package org.ap.android.alarm.ui;
 
 import android.app.Fragment;
+import android.util.Log;
 import android.view.MenuItem;
 
 import org.ap.android.alarm.R;
+import org.ap.android.alarm.common.AlarmUtils;
 import org.ap.android.alarm.common.IAlarmDateTime;
 import org.ap.android.alarm.dto.AlarmDateTimeDto;
 import org.ap.android.alarm.dto.AlarmDto;
@@ -16,6 +18,7 @@ import java.util.TimeZone;
  */
 public abstract class AbstractDateTimeFragment extends Fragment implements IAlarmDateTime {
 
+    private static final String TAG = AbstractDateTimeFragment.class.getName();
     private IAlarmDateTime dateTimeDto = new AlarmDateTimeDto();
 
     @Override
@@ -111,6 +114,7 @@ public abstract class AbstractDateTimeFragment extends Fragment implements IAlar
         }
 
         final Calendar c = Calendar.getInstance(dto.getTz());
+        Log.d(TAG, "setting time in ui from dto: " + AlarmUtils.formatTime(dto.getStartTimeWithoutTz(), dto.getTz().getID()));
         c.setTimeInMillis(dto.getStartTimeWithoutTz());
 
         if (setDate) {

@@ -1,6 +1,7 @@
 package org.ap.android.alarm.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -52,6 +53,7 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
     private MediaPlayer mediaPlayer;
     private boolean snooze = false;
     private CountDownLatch latch;
+    private CountDownLatch notificationLatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,8 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
 
         setContentView(R.layout.activity_alarm_receiver);
 
-        final String alarmDesc = this.getIntent().getStringExtra(AlarmUtils.ALARM_DESC);
-        TextView txt = (TextView) findViewById(R.id.alarmReceiverTxt);
+        final String alarmDesc = getAlarmDescription();
+        final TextView txt = (TextView) findViewById(R.id.alarmReceiverTxt);
         txt.setText(txt.getText() + ": alarm description: " + alarmDesc == null ? "" : alarmDesc);
 
         playRingtone();
@@ -82,6 +84,10 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
+
+                notificationLatch = new CountDownLatch(1);
+                new Thread(new TimerThread(notificationLatch, this, getAlarmId(), getAlarmDescription())).start();
+
                 mediaPlayer.start();
             }
         } catch (IOException e) {
@@ -102,6 +108,7 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
     }
 
     private void stopMediaPlayer() {
+        notificationLatch.countDown();
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
@@ -129,6 +136,10 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
 
     private long getAlarmId() {
         return getIntent().getLongExtra(AlarmUtils.ALARM_ID_BEING_PASSED, -1);
+    }
+
+    private String getAlarmDescription() {
+        return this.getIntent().getStringExtra(AlarmUtils.ALARM_DESC);
     }
 
     private AlarmDto reduceAlarmCountIndDb(final AlarmDto dto) {
@@ -293,5 +304,50 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
     @Override
     public void onRetrieveOperationPerformed(final AlarmDto dto) {
         handleAlarmObtainedFromDb(dto);
+    }
+
+    private static class TimerThread implements Runnable {
+
+        private final CountDownLatch latch;
+        private final AlarmReceiverActivity activity;
+        private final long alarmId;
+        private final String alarmDesc;
+
+        private TimerThread(final CountDownLatch latch, final AlarmReceiverActivity context, final long alarmId, final String alarmDesc) {
+            this.latch = latch;
+            this.activity = context;
+            this.alarmId = alarmId;
+            this.alarmDesc = alarmDesc;
+        }
+
+        @Override
+        public void run() {
+            try {
+                latch.await(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                // do nothing
+            }
+            if (latch.getCount() > 0) {
+                // after the time is up, the alarm is still ringing. show it in the notification bar
+                handleAlarmNotHandledByUser();
+            }
+        }
+
+        private void createNotification() {
+            final Intent intent = new Intent(activity, NotificationActivity.class);
+            intent.putExtra(AlarmUtils.ALARM_ID_BEING_PASSED, alarmId);
+            intent.putExtra(AlarmUtils.ALARM_DESC, alarmDesc);
+
+            // so that when this activity stops, the main activity is not shown;
+            // basically start a new task when starting the notification activity that handles its backstack
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.startActivity(intent);
+        }
+
+        private void handleAlarmNotHandledByUser() {
+            createNotification();
+            activity.stopMediaPlayer();
+            activity.finish();
+        }
     }
 }
