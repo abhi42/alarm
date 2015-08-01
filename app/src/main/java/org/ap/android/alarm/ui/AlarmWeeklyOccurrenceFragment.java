@@ -147,6 +147,18 @@ public class AlarmWeeklyOccurrenceFragment extends AbstractDateTimeFragment impl
         dto.setType(AlarmType.WEEKLY);
         dto.setWeekDays(selectedWeekDays);
         setTimeInAlarmDto(dto);
+        if (isNoDaySelected()) {
+            dto.setIsEnabled(false);
+        }
+    }
+
+    private boolean isNoDaySelected() {
+        for (boolean aDay : selectedWeekDays) {
+            if (aDay) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

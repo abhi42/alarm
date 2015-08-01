@@ -58,7 +58,6 @@ public class AlarmUtils {
         // TODO when multiple alarms are allowed, their pending intents have to be different
         // see documentation of PendingIntent class. In this case, change the request code
         // so that it uniquely identifies the pending intent to a particular alarm.
-        Log.d(TAG, "Alarm id being set in intent that is created: " + alarmId);
         final Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra(ALARM_ID_BEING_PASSED, alarmId);
         intent.putExtra(ALARM_DESC, alarmDesc);
@@ -75,6 +74,7 @@ public class AlarmUtils {
 
     public static void updateAlarmInSystem(final Context context, final AlarmDto dto) {
         cancelAlarmInSystem(context, dto);
+        Log.d(TAG, "Alarm in system will be updated with this date and time: " + formatDateTime(dto.getStartTimeWithoutTz(), dto.getTz().getID()));
         createAlarmInSystem(context, dto);
     }
 

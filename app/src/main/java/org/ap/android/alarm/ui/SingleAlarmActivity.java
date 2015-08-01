@@ -149,6 +149,7 @@ abstract class SingleAlarmActivity extends ActionBarActivity implements IAlarmOp
         final AlarmDto dto = new AlarmDto();
 
         setCommonData(dto);
+        // this may override some values set in the common method.
         additionalDataProviderFromUi.addAlarmData(dto);
         AlarmDto.setCurrentDto(dto);
         return dto;
