@@ -34,9 +34,12 @@ public class AlarmUtils {
     public static final DateFormat DEFAULT_DATE_TIME_FORMAT = new SimpleDateFormat("E, LLL dd, " +
             "HH:mm");
     private static final String TAG = AlarmUtils.class.getName();
+
     // don't use these variable directly, use their getOrCreate() methods
     private static String prefSnoozeIntervalKey;
     private static Integer prefDefaultSnoozeInterval;
+    private static String prefRingDurationKey;
+    private static Integer prefDefaultRingDuration;
 
     public static String formatTime(final int hr, final int minute) {
         final Calendar c = Calendar.getInstance();
@@ -131,10 +134,19 @@ public class AlarmUtils {
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(activity);
         final String snoozeIntervalKeyLocal = getOrCreateSnoozeIntervalKey(activity);
-        final int defaultSnoozeIntervalLocal = getOrCrateDefaultSnoozeInterval(activity);
+        final int defaultSnoozeIntervalLocal = getOrCreateDefaultSnoozeInterval(activity);
         final String currentSnoozeInterval = sharedPreferences.getString(snoozeIntervalKeyLocal, String.valueOf
                 (defaultSnoozeIntervalLocal));
         return Integer.valueOf(currentSnoozeInterval) * 60 *1000;
+    }
+
+    public static int getRingDurationInSeconds(final Activity activity) {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        final String ringDurationKeyLocal = getOrCreateRingDurationKey(activity);
+        final int defaultRingDurationLocal = getOrCreateDefaultRingDuration(activity);
+        final String currentRingDuration = sharedPreferences.getString(ringDurationKeyLocal, String.valueOf
+                (defaultRingDurationLocal));
+        return Integer.valueOf(currentRingDuration);
     }
 
     public static String getOrCreateSnoozeIntervalKey(final Activity activity) {
@@ -145,12 +157,10 @@ public class AlarmUtils {
     }
 
     private static void createSnoozeIntervalKey(final Activity activity) {
-        final Resources resources = activity.getResources();
-        prefSnoozeIntervalKey = resources.getString(R.string
-                .pref_snoozeIntervalKey);
+        prefSnoozeIntervalKey = createFromResource(activity, R.string.pref_snoozeIntervalKey);
     }
 
-    public static int getOrCrateDefaultSnoozeInterval(final Activity activity) {
+    public static int getOrCreateDefaultSnoozeInterval(final Activity activity) {
         if (prefDefaultSnoozeInterval == null) {
             createDefaultSnoozeInterval(activity);
         }
@@ -165,6 +175,39 @@ public class AlarmUtils {
         } catch (Resources.NotFoundException e) {
             prefDefaultSnoozeInterval = 5;
         }
+    }
+
+    public static String getOrCreateRingDurationKey(final Activity activity) {
+        if (prefRingDurationKey == null) {
+            createRingDurationKey(activity);
+        }
+        return prefRingDurationKey;
+    }
+
+    private static void createRingDurationKey(final Activity activity) {
+        prefRingDurationKey = createFromResource(activity, R.string.pref_alarmRingDurationKey);
+    }
+
+    public static int getOrCreateDefaultRingDuration(final Activity activity) {
+        if (prefDefaultRingDuration == null) {
+            createDefaultRingDuration(activity);
+        }
+        return prefDefaultRingDuration;
+    }
+
+    private static void createDefaultRingDuration(final Activity activity) {
+        final Resources resources = activity.getResources();
+        try {
+            prefDefaultRingDuration = resources.getInteger(R.integer
+                    .pref_ringIntervalDefaultValue);
+        } catch (Resources.NotFoundException e) {
+            prefDefaultRingDuration = 20;
+        }
+    }
+
+    private static String createFromResource(final Activity activity, final int id) {
+        final Resources resources = activity.getResources();
+        return resources.getString(id);
     }
 
     private static void logAlarmDetails(final Calendar c, final long alarmId,

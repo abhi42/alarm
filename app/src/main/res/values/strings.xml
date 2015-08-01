@@ -33,9 +33,6 @@
 
     <string name="menuDeleteAlarm">Delete</string>
 
-    <string name="pref_snoozeIntervalTitle">Snooze interval</string>
-    <string name="pref_confirmOnDeleteTitle">Confirm alarm deletion</string>
-
     <!-- additional functionality related to recurring alarms and reminders-->
 
     <string name="choice_alarm_type_weekly_text">Weekly</string>
@@ -54,8 +51,11 @@
     <string name="setRecurrenceCancelBtnText">Cancel</string>
     <!-- end addtional functionality-->
 
+    <!-- Settings/preferences-->
+    <string name="pref_snoozeIntervalTitle">Snooze interval</string>
+    <string name="pref_ringDurationTitle">Ring duration</string>
     <!-- not to be localised-->
     <string name="pref_snoozeIntervalKey">pref_snoozeInterval</string>
-    <string name="title_activity_test_reccurence">TestReccurenceActivity</string>
+    <string name="pref_alarmRingDurationKey">pref_ringDuration</string>
 
 </resources>

@@ -323,7 +323,7 @@ public class AlarmReceiverActivity extends ActionBarActivity implements IAlarmOp
         @Override
         public void run() {
             try {
-                latch.await(10, TimeUnit.SECONDS);
+                latch.await(AlarmUtils.getRingDurationInSeconds(activity), TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 // do nothing
             }

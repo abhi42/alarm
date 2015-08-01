@@ -18,7 +18,7 @@ public class AlarmSettingsFragment extends PreferenceFragment implements SharedP
 
     // use PreferenceFragment instead of PreferenceActivity as suggested by android documentation
     private static final String SNOOZE_INTERVAL_SUMMARY = "{0} minutes";
-    private static final String TAG = AlarmSettingsFragment.class.getName();
+    private static final String RING_DURATION_SUMMARY = "{0} seconds";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class AlarmSettingsFragment extends PreferenceFragment implements SharedP
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
-        setSummary();
+        setPreferenceSummary();
     }
 
     @Override
@@ -41,22 +41,29 @@ public class AlarmSettingsFragment extends PreferenceFragment implements SharedP
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    private void setSummary() {
+    private void setPreferenceSummary() {
         setSnoozeIntervalSummary();
+        setRingDurationSummary();
+    }
+
+    private void setRingDurationSummary() {
+        final String ringDurationKey = AlarmUtils.getOrCreateRingDurationKey(getActivity());
+        final int defaultRingDuration = AlarmUtils.getOrCreateDefaultRingDuration(getActivity());
+        setPreferenceSummary(ringDurationKey, defaultRingDuration, RING_DURATION_SUMMARY);
+    }
+
+    private void setPreferenceSummary(final String key, final int defaultValue, final String messageTemplate) {
+        final SharedPreferences sharedPreferences = getPreferenceScreen()
+                .getSharedPreferences();
+        final String currentValue = sharedPreferences.getString(key, String.valueOf(defaultValue));
+        final Preference preference = findPreference(key);
+        preference.setSummary(MessageFormat.format(messageTemplate, currentValue));
     }
 
     private void setSnoozeIntervalSummary() {
-        final SharedPreferences sharedPreferences = getPreferenceScreen()
-                .getSharedPreferences();
-
         final String snoozeIntervalKey = AlarmUtils.getOrCreateSnoozeIntervalKey(getActivity());
-        final int defaultSnoozeInterval = AlarmUtils.getOrCrateDefaultSnoozeInterval(getActivity());
-
-        final String currentSnoozeInterval = sharedPreferences.getString(snoozeIntervalKey,
-                String.valueOf(defaultSnoozeInterval));
-        final Preference preference = findPreference(snoozeIntervalKey);
-        preference.setSummary(MessageFormat.format(SNOOZE_INTERVAL_SUMMARY,
-                currentSnoozeInterval));
+        final int defaultSnoozeInterval = AlarmUtils.getOrCreateDefaultSnoozeInterval(getActivity());
+        setPreferenceSummary(snoozeIntervalKey, defaultSnoozeInterval, SNOOZE_INTERVAL_SUMMARY);
     }
 
     @Override
@@ -67,15 +74,25 @@ public class AlarmSettingsFragment extends PreferenceFragment implements SharedP
             handleSnoozeIntervalChanged(sharedPreferences, snoozeIntervalKey);
             return;
         }
+        final String ringDurationKey = AlarmUtils.getOrCreateRingDurationKey(getActivity());
+        if (key.equals(ringDurationKey)) {
+            handleRingDurationChanged(sharedPreferences, ringDurationKey);
+        }
+    }
+
+    private void handleRingDurationChanged(final SharedPreferences sharedPreferences, final String ringDurationKey) {
+        final int defaultRingDuration = AlarmUtils.getOrCreateDefaultRingDuration(getActivity());
+        handlePreferenceValueChanged(sharedPreferences, ringDurationKey, defaultRingDuration, RING_DURATION_SUMMARY);
+    }
+
+    private void handlePreferenceValueChanged(final SharedPreferences sharedPreferences, final String key, final int defaultValue, final String messageTemplate) {
+        final String currentValue = sharedPreferences.getString(key, String.valueOf(defaultValue));
+        final Preference preference = findPreference(key);
+        preference.setSummary(MessageFormat.format(messageTemplate, currentValue));
     }
 
     private void handleSnoozeIntervalChanged(final SharedPreferences sharedPreferences, final String snoozeIntervalKeyLocal) {
-        final int defaultSnoozeInterval = AlarmUtils.getOrCrateDefaultSnoozeInterval(getActivity());
-        final String currentSnoozeInterval = sharedPreferences.getString(snoozeIntervalKeyLocal,
-                String.valueOf(defaultSnoozeInterval));
-
-        final Preference preference = findPreference(snoozeIntervalKeyLocal);
-        preference.setSummary(MessageFormat.format(SNOOZE_INTERVAL_SUMMARY,
-                currentSnoozeInterval));
+        final int defaultSnoozeInterval = AlarmUtils.getOrCreateDefaultSnoozeInterval(getActivity());
+        handlePreferenceValueChanged(sharedPreferences, snoozeIntervalKeyLocal, defaultSnoozeInterval, SNOOZE_INTERVAL_SUMMARY);
     }
 }
