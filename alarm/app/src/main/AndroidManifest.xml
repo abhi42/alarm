@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.ap.android.alarm" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/alarm_logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ui.MainAlarmActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.AlarmSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.MainAlarmActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name=".ui.AlarmReceiverActivity"
+            android:label="Alarm Receiver Activity"
+            android:parentActivityName=".ui.MainAlarmActivity">
+        </activity>
+
+        <receiver
+            android:name=".task.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
+        <activity
+            android:name=".ui.AddSingleAlarmActivity"
+            android:label="Add Alarm"
+            android:parentActivityName=".ui.MainAlarmActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ui.EditSingleAlarmActivity"
+            android:label="Edit Alarm"
+            android:parentActivityName=".ui.MainAlarmActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ui.NotificationActivity"
+            android:label="Alarm Notification Activity"
+            android:parentActivityName=".ui.MainAlarmActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+    </application>
+
+</manifest>

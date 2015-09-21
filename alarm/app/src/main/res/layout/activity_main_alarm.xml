@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_material_light"
+    tools:context="org.ap.android.alarm.ui.MainAlarmActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_alarm_activity_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/floating_add_button"
+        android:onClick="onClickAddAlarm"
+        android:src="@drawable/ic_add_white_24dp"
+        />
+</RelativeLayout>

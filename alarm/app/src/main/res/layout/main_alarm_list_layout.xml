@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- since layout_weight is specified, not specifying layout_width -->
+        <TextView
+            android:id="@+id/alarmListAlarmStartTimeField"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="80"
+            android:ellipsize="marquee"
+            android:gravity="start"
+            android:maxLines="1" />
+
+        <TextView
+            android:id="@+id/alarmListAlarmEnabledField"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="8"
+            android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/alarmListDeleteAlarmIcon"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="12"
+            android:src="@drawable/ic_delete_black" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/alarmListAlarmDescField"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:ellipsize="marquee"
+        android:gravity="start"
+        android:maxLength="@integer/list_alarm_desc_max_length"
+        android:maxLines="1"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/alarmListDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/alarm_list_divider_shape" />
+</LinearLayout>

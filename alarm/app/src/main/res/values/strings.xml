@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">ApaAlarm Plus</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="alarmDescText">Alarm description</string>
+    <string name="alarmDescHint">max 50 letters</string>
+
+    <string name="alarmStartText">Start date and time of the alarm</string>
+    <string name="alarmIntervalText">Alarm interval</string>
+    <string name="alarmNumOccurrencesText">Number of occurrences</string>
+
+    <string-array name="alarmIntervalUnitValues">
+        <item>Minutes</item>
+        <item>Hours</item>
+    </string-array>
+
+    <string name="alarmIntervalViewDefaultText">1 hour</string>
+    <string name="alarmOccurrencesViewDefaultText">3</string>
+
+    <string name="submitAlarmBtnText">Create Alarm</string>
+
+    <string name="alarmReceiverText">Hi there, got </string>
+    <string name="alarmReceiverStopRingingBtnText">Dismiss</string>
+    <string name="alarmReceiverSnoozeBtnText">Snooze</string>
+    <string name="title_activity_main_alarm">MainAlarmActivity</string>
+
+    <string name="alarmEnabledLabel">On</string>
+    <string name="alarmDisabledLabel">Off</string>
+    <string name="alarmStatusToggleText">Alarm is enabled</string>
+
+    <string name="submitEditAlarmBtnText">Done</string>
+
+    <string name="menuDeleteAlarm">Delete</string>
+
+    <!-- additional functionality related to recurring alarms and reminders-->
+
+    <string name="choice_alarm_type_weekly_text">Weekly</string>
+    <string name="choice_alarm_type_monthly_text">Monthly</string>
+    <string name="choice_alarm_type_repetitive_text">Daily</string>
+
+    <string name="sunday_short">Sun</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+
+    <string name="setRecurrenceOkBtnText">Ok</string>
+    <string name="setRecurrenceCancelBtnText">Cancel</string>
+    <!-- end addtional functionality-->
+
+    <!-- Settings/preferences-->
+    <string name="pref_snoozeIntervalTitle">Snooze interval</string>
+    <string name="pref_ringDurationTitle">Ring duration</string>
+    <!-- not to be localised-->
+    <string name="pref_snoozeIntervalKey">pref_snoozeInterval</string>
+    <string name="pref_alarmRingDurationKey">pref_ringDuration</string>
+
+</resources>

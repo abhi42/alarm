@@ -1,0 +1,19 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="alarm_activity_date_picker_padding">15dp</dimen>
+    <dimen name="alarm_activity_time_picker_padding">30dp</dimen>
+
+    <dimen name="default_separation_between_categories">20dp</dimen>
+    <dimen name="default_separation_between_title_and_view">10dp</dimen>
+
+    <dimen name="default_separation_to_submit_btn">50dp</dimen>
+    <dimen name="alarm_activity_submit_btn_padding">15dp</dimen>
+
+    <dimen name="alarm_receiver_activity_stop_ringing_padding">15dp</dimen>
+
+    <!-- additional functionality for recurring alarms and reminders-->
+    <dimen name="default_margin_between_weekdays_in_recurring_alarm">5dp</dimen>
+</resources>
